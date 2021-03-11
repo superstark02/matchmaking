@@ -1,0 +1,9 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 10px;
+    flex-wrap: wrap;
+  }
+  .grid-item {
+    font-size: 30px;
+  }
