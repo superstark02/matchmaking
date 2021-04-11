@@ -6,7 +6,7 @@ export default function getCollection(name) {
 
         var data = [];
 
-        db.collection(name)
+        db.collection(name).limit(9).orderBy('exp', 'desc')
             .get()
             .then(snapshot => {
 
@@ -28,7 +28,7 @@ export function getQuery(name, query) {
 
         var data = [];
 
-        db.collection(name).where("location", "==", query)
+        db.collection(name).orderBy("exp", "desc").startAfter(query).limit(10)
             .get()
             .then(snapshot => {
 

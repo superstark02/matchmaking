@@ -11,8 +11,11 @@ export class MyList extends Component {
 
     state = {
         shows: [],
-        search: null
+        search: null,
+        search_subject: null,
+        exp: null
     }
+
     componentDidMount() {
         getCollection("Teachers").then(snap => {
             this.setState({ shows: snap })
@@ -21,11 +24,23 @@ export class MyList extends Component {
         //uploadData(data)
     }
 
-    search = () => {
-        getQuery("Teachers", this.state.search).then(snap=>{
-            this.setState({shows:snap})
+    loadMore = () => {
+        getQuery("Teachers", this.state.shows[this.state.shows.length-1].exp).then(snap=>{
+            var temp = this.state.shows
+            var i = 0
+            for(i; i < snap.length; i++){
+                temp.push(snap[i])
+            }
+
+            this.setState({shows:temp})
         })
     }
+
+    /*search = () => {
+        getQuery("Teachers", this.state.search).then(snap => {
+            this.setState({ shows: snap })
+        })
+    }*/
 
     render() {
         filteredClass = this.state.shows
@@ -33,7 +48,9 @@ export class MyList extends Component {
         if (this.state.search && this.state.shows) {
             filteredClass = this.state.shows.filter(
                 item =>
-                    item.location.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1
+                    item.subject.toLowerCase().indexOf(this.state.search_subject.toLowerCase()) !== -1 &&
+                    item.location.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1 &&
+                    item.exp >= this.state.exp
             )
         }
         return (
@@ -42,7 +59,8 @@ export class MyList extends Component {
                     <div style={{ margin: "0px 10px" }} >
                         Subject
                     </div>
-                    <input placeholder="Search" className="search-box" />
+                    <input placeholder="Search" onChange={(e) => { this.setState({ search_subject: e.target.value }) }}
+                        value={this.state.search_subject} className="search-box" />
                     <button type="submit" className="submit" >
                         Search
                     </button>
@@ -51,7 +69,8 @@ export class MyList extends Component {
                     <div style={{ margin: "0px 10px" }} >
                         Experience
                     </div>
-                    <input placeholder="Search" className="search-box" />
+                    <input placeholder="Search" onChange={(e) => { this.setState({ exp: e.target.value }) }}
+                        value={this.state.exp} className="search-box" />
                     <button type="submit" className="submit" >
                         Search
                     </button>
@@ -61,23 +80,25 @@ export class MyList extends Component {
                         Location
                     </div>
                     <input placeholder="Search" onChange={(e) => { this.setState({ search: e.target.value }) }}
-                            value={this.state.search} className="search-box" />
+                        value={this.state.search} className="search-box" />
                     <button type="submit" className="submit" onClick={this.search} >
                         Search
                     </button>
-                </div>s
+                </div>
                 <div className="wrap" >
                     <div className="wrapper" >
                         <div class="grid-container">
                             {
-                                this.state.shows &&
-                                this.state.shows.map(item => {
+                                filteredClass &&
+                                filteredClass.map(item => {
                                     return (
                                         <RecipeReviewCard
                                             image={item.image}
                                             name={item.name}
                                             location={item.location}
                                             desc={item.desc}
+                                            subject={item.subject}
+                                            exp={item.exp}
                                         />
                                     )
                                 })
@@ -86,7 +107,7 @@ export class MyList extends Component {
                     </div>
                 </div>
                 <div className="wrap" >
-                    <button>Load More</button>
+                    <button onClick={this.loadMore}  >Load More</button>
                 </div>
             </div>
         )

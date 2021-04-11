@@ -65,6 +65,12 @@ export default function RecipeReviewCard(props) {
         title="Paella dish"
       />
       <CardContent>
+      <Typography variant="body2" color="textSecondary" component="p">
+          Subject: {props.subject}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          Experience: {props.exp} years
+        </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
           {props.desc}
         </Typography>
