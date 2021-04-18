@@ -1,0 +1,22 @@
+// data reading
+
+var data = call_data().limit_to(9 objects)
+
+if(search_field is not empty){
+	data = call_data().limit_to(9 objects).query(seach_field_string)
+}
+
+data.map(array)
+
+array.display_on_page
+
+
+//data writing
+var form_data = data_filled_by_user
+
+upload_the_data_to_database(form_data).then(
+    print(receive_feedback)
+)
+
+
+
